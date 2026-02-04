@@ -141,6 +141,9 @@
   margin-top: 20px;
 }
 
+
+
+
 @media screen and (max-width: 630px) {
   .popup {
     align-items: flex-end;
