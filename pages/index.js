@@ -1,5 +1,5 @@
 import { initialTodos, validationConfig } from "../utils/constants.js";
-
+import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import Todo from "../components/Todo.js";
 import FormValidator from "../components/FormValidator.js";
 //import
@@ -71,6 +71,7 @@ addTodoForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
   const name = evt.target.name.value;
   const dateInput = evt.target.date.value;
+  console.log("collect");
 
   // Create a date object and adjust for timezone
   const date = new Date(dateInput);
@@ -83,12 +84,15 @@ addTodoForm.addEventListener("submit", (evt) => {
   closeModal(addTodoPopup);
 });
 
-
-
 initialTodos.forEach((item) => {
   const todo = generateTodo(item);
   todosList.append(todo);
 });
 
-const newFormValidator = new FormValidator(validationConfig, addTodoForm);
-newFormValidator.enableValidation();
+const formElement = document.querySelector("#add-todo-form");
+
+const formValidator = new FormValidator(validationConfig, formElement);
+formValidator.enableValidation();
+
+//const newFormValidator = new FormValidator(validationConfig, addTodoForm);
+//newFormValidator.enableValidation();
