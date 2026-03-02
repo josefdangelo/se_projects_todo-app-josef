@@ -5,15 +5,14 @@ class Todo {
   }
 
   _setEventListeners() {
-    this._todoCheckboxEl.addEventListener("change", () => {
-      this._data.completed = !this._data.completed;
+  this._todoCheckboxEl.addEventListener("change", () => {
+    this._data.completed = !this._data.completed;
+  });
 
-      // set up delete button handler
-      this._todoDeleteBtn.addEventListener("click", () => {
-        this._todoElement.remove();
-      });
-    });
-  }
+  this._todoDeleteBtn.addEventListener("click", () => {
+    this._todoElement.remove();
+  });
+}
 
   _generateCheckboxEl() {
     this._todoCheckboxEl = this._todoElement.querySelector(".todo__completed");

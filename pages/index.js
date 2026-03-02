@@ -71,7 +71,6 @@ addTodoForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
   const name = evt.target.name.value;
   const dateInput = evt.target.date.value;
-  console.log("collect");
 
   // Create a date object and adjust for timezone
   const date = new Date(dateInput);
@@ -79,7 +78,7 @@ addTodoForm.addEventListener("submit", (evt) => {
 
   const id = uuidv4();
   const values = { name, date, id };
-  const todo = generateTodo(values);
+  renderTodo(values);
   todosList.append(todo);
   closeModal(addTodoPopup);
 });
