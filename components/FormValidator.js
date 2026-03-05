@@ -64,7 +64,7 @@ class FormValidator {
     //   settings.submitButtonSelector,
     // );
 
-    //  this._toggleButtonState();
+    this._toggleButtonState();
 
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
