@@ -22,8 +22,8 @@ const addTodoPopup = new PopupWithTheForm({
     console.log(data);
     // TODO - move code from existing submission handlerto here
 
-      const name = evt.target.name.value;
-  const dateInput = evt.target.date.value;
+      const name = data.name;
+  const dateInput = data.date;
 
   // Create a date object and adjust for timezone
   const date = new Date(dateInput);
@@ -72,10 +72,17 @@ console.log(section);
 //   modal.classList.remove("popup_visible");
 // };
 
+function deleteFunction(completed) {
+if (completed){}
+  todoCounter.updateCompleted(false);
+}
+
 function updateTodoCounter(completed) {
 todoCounter.updateCompleted(completed);
 console.log(completed); 
 }
+
+
 
 // The logic in this function should all be handled in the Todo class.
 const generateTodo = (data) => {
