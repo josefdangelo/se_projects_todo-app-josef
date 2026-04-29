@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import Todo from "../components/Todo.js";
 import FormValidator from "../components/FormValidator.js";
 import Section from "../components/Section.js";
-import PopupWithTheForm from "../components/PopupWithTheForm.js";
+import PopupWithForm from "../components/PopupWithForm.js";
 import TodoCounter from "../components/TodoCounter.js";
 //import
 //instantiate
@@ -16,150 +16,82 @@ const todosList = document.querySelector(".todos__list");
 
 const todoCounter = new TodoCounter(initialTodos, ".counter__text");
 
-const addTodoPopup = new PopupWithTheForm({
+const addTodoPopup = new PopupWithForm({
   popupSelector: "#add-todo-popup",
   handleFormSubmit: (data) => {
     console.log(data);
     // TODO - move code from existing submission handlerto here
 
-      const name = data.name;
-  const dateInput = data.date;
+    const name = data.name;
+    const dateInput = data.date;
 
-  // Create a date object and adjust for timezone
-  const date = new Date(dateInput);
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    // Create a date object and adjust for timezone
+    const date = new Date(dateInput);
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
-  const id = uuidv4();
-  const values = { name, date, id };
-  renderTodo(values);
+    const id = uuidv4();
+    const values = { name, date, id };
+    renderTodo(values);
+    // Add this line to increment the counter
+    todoCounter.updateTotal(true); // true = increment by 1
+    formValidator.resetValidation();
 
-  formValidator.resetValidation();
-
- addTodoPopup.close();
-
+    addTodoPopup.close();
   },
-}); 
+});
 addTodoPopup.setEventListeners();
 
 const section = new Section({
   items: initialTodos, // pass initial todos
   renderer: (item) => {
     const todo = generateTodo(item);
-    todosList.append(todo);
+    return todo; // ← Just return, don't append
   },
-
-  renderItems() {
-  
-  },
-
-  addItem(){
-
-  },
-
 
   containerSelector: ".todos__list",
 });
 
 console.log(section);
 
-// call the renderItems section
-
-// const openModal = (modal) => {
-//   modal.classList.add("popup_visible");
-// };
-
-// const closeModal = (modal) => {
-//   modal.classList.remove("popup_visible");
-// };
-
 function deleteFunction(completed) {
-if (completed){}
-  todoCounter.updateCompleted(false);
+  // Always decrement total (every deleted todo reduces the total)
+  todoCounter.updateTotal(false);
+
+  // Only decrement completed if the deleted todo was completed
+  if (completed) {
+    todoCounter.updateCompleted(false);
+  }
 }
 
 function updateTodoCounter(completed) {
-todoCounter.updateCompleted(completed);
-console.log(completed); 
+  todoCounter.updateCompleted(completed);
+  console.log(completed);
 }
-
-
 
 // The logic in this function should all be handled in the Todo class.
 const generateTodo = (data) => {
-  const todo = new Todo(data, "#todo-template", updateTodoCounter);
+  const todo = new Todo(
+    data,
+    "#todo-template",
+    updateTodoCounter,
+    deleteFunction,
+  );
   const todoElement = todo.getView();
   return todoElement;
 
-  //To be removed:
-  // const todoElement = todoTemplate.content
-  //   .querySelector(".todo")
-  //   .cloneNode(true);
-  // const todoNameEl = todoElement.querySelector(".todo__name");
-  // const todoCheckboxEl = todoElement.querySelector(".todo__completed");
-  // const todoLabel = todoElement.querySelector(".todo__label");
-  // const todoDate = todoElement.querySelector(".todo__date");
-  // const todoDeleteBtn = todoElement.querySelector(".todo__delete-btn");
-
-  // todoNameEl.textContent = data.name;
-  // todoCheckboxEl.checked = data.completed;
-
-  // // Apply id and for attributes.
-  // // The id will initially be undefined for new todos.
-  // todoCheckboxEl.id = `todo-${data.id}`;
-  // todoLabel.setAttribute("for", `todo-${data.id}`);
-
-  // // If a due date has been set, parsing this it with `new Date` will return a
-  // // number. If so, we display a string version of the due date in the todo.
-  // const dueDate = new Date(data.date);
-  // if (!isNaN(dueDate)) {
-  //   todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
-  //     year: "numeric",
-  //     month: "short",
-  //     day: "numeric",
-  //   })}`;
-  // }
-
-  // todoDeleteBtn.addEventListener("click", () => {
-  //   todoElement.remove();
-  // });
 };
 
 function handleEscapeClose(evt) {
   if (evt.key === "Escape") {
-   document.addEventListener("keydown", handleEscapeClose);
+    document.addEventListener("keydown", handleEscapeClose);
     addTodoPopup.close();
   }
-
-};
-
+}
 
 addTodoButton.addEventListener("click", () => {
   addTodoPopup.open();
-  
-  
 });
 
-// addTodoCloseBtn.addEventListener("click", () => {
-//   addTodoPopup.close();
-// });
-
-// addTodoForm.addEventListener("submit", (evt) => {
-//   evt.preventDefault();
-//   const name = evt.target.name.value;
-//   const dateInput = evt.target.date.value;
-
-//   // Create a date object and adjust for timezone
-//   const date = new Date(dateInput);
-//   date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
-//   const id = uuidv4();
-//   const values = { name, date, id };
-//   renderTodo(values);
-
-//   formValidator.resetValidation();
-
-//  addTodoPopup.close();
-// });
 
 const renderTodo = (item) => {
   const todo = generateTodo(item);

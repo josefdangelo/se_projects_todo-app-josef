@@ -5,21 +5,19 @@ class Popup {
   }
 
   _handleEscapeClose(evt) {
-    if (evt.key === "Escape") { 
-    this.close();
-  }
-
-   
+    if (evt.key === "Escape") {
+      this.close();
+    }
   }
 
   open() {
     this._popupElement.classList.add("popup_visible");
-   document.addEventListener("keydown", this._handleEscapeClose.bind(this));
+    document.addEventListener("keydown", this._escHandler); // Use stored reference
   }
 
   close() {
     this._popupElement.classList.remove("popup_visible");
-    document.removeEventListener("keydown", this._handleEscapeClose);
+    document.removeEventListener("keydown", this._escHandler); // Use same reference
   }
 
   setEventListeners() {
@@ -31,7 +29,7 @@ class Popup {
       if (evt.target === this._popupElement) {
         this.close();
       }
-    }); 
+    });
   }
 }
 export default Popup;
